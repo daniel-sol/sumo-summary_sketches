@@ -1,0 +1,16 @@
+-- Aggregate summary files into arrow files, both with
+
+--                       ert_caseroot               vector_filter    keep_aggregated
+WF_AGGREGATE_SUMMARY  <SCRATCH>/<USER>/<CASE_DIR>  "*"  "-keep_aggregated"
+
+--              ert_caseroot               search pattern                sumo_environment
+SUMO_UPLOAD <SCRATCH>/<USER>/<CASE_DIR> "share/results/tables/*.arrow" <SUMO_ENV>
+-- This workflow is intended to be ran as a HOOK workflow.
+-- This workflow job is locally installed, from ert/bin/jobs.
+
+-- Arguments:
+-- ert_caseroot (Path): The absolute path to the root of the case on /scratch
+-- vector_filter (str): filter for vectors to extract
+-- global_variables_file (str): one global variables file
+
+-- The workflow needs to be run post simulation, otherwise there is nothing to aggregate ;-)
