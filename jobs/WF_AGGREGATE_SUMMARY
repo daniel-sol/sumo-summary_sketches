@@ -1,0 +1,6 @@
+-- This workflow job is run with workflow
+-- For description of arguments, see workflow
+
+
+EXECUTABLE ../scripts/wf_aggregate_sum.py
+-- ARGLIST <scratch_path> <vector_filter>
