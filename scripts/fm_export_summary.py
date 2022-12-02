@@ -35,6 +35,8 @@ def parse_args():
         help="path to fmu config yaml file"
     )
 
+    parser.add_argument("--vectors", nargs="*", default=["*"], help="vector filter")
+
     parser.add_argument("-d", help="debug mode", action="store_true")
 
     args = parser.parse_args()
@@ -43,7 +45,7 @@ def parse_args():
     return args
 
 
-def export_sum(eclipse_path, cfg_path):
+def export_sum(eclipse_path, cfg_path, vectors):
     """Exports summary data with fmu-dataio
     args:
      eclipse_path (str): path to eclipse datafile
@@ -54,8 +56,9 @@ def export_sum(eclipse_path, cfg_path):
 
     name = "summary"
     eclfiles = EclFiles(eclipse_path)
-    dframe = summary.df(eclfiles)
-
+    extract_columns = vectors
+    dframe = summary.df(eclfiles, column_keys=extract_columns)
+    print(f"Exporting vectors {dframe.columns.tolist()}")
     exporter = ExportData(config=yaml_load(cfg_path))
     exporter.export(pa.Table.from_pandas(dframe), name=name, workflow="eclipse")
 
@@ -63,7 +66,7 @@ def export_sum(eclipse_path, cfg_path):
 def main():
     """ fetches input, exports parquet file"""
     args = parse_args()
-    export_sum(args.Eclipse_path, args.Config_path)
+    export_sum(args.Eclipse_path, args.Config_path, args.vectors)
 
 
 if __name__ == "__main__":
